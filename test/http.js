@@ -23,6 +23,13 @@ function A () {
 }
 
 const server = http.server(A())
+
+server.on('request', function (req) {
+  // unref to avoid keepalive connections
+  // to keep this open in tests
+  req.client.unref()
+})
+
 server.listen(function (err) {
   t.error(err)
 

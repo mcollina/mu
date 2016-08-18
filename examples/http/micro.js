@@ -1,12 +1,16 @@
 'use strict'
 
-const mu = require('../../')()
+const mu = require('../../')
 
-mu.add({
-  some: 'pattern'
-}, function (ctx, msg, cb) {
-  const result = msg.name || 'world'
-  cb(null, { hello: result })
-})
+function build () {
+  const i = mu()
+  i.add({
+    some: 'pattern'
+  }, function (ctx, msg, cb) {
+    const result = msg.name || 'world'
+    cb(null, { hello: result })
+  })
+  return i
+}
 
-module.exports = mu
+module.exports = build

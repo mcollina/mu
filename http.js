@@ -11,10 +11,6 @@ function server (mu) {
   return http.createServer(handle)
 
   function handle (req, res) {
-    // unref to avoid keepalive connections
-    // to keep this open in tests
-    req.client.unref()
-
     json(req, res, function (err) {
       if (err) {
         res.statusCode = err.statusCode
