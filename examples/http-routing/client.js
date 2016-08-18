@@ -10,4 +10,4 @@ const msg = {
   name: process.argv[3]
 }
 
-client.act(msg, console.log)
+client.send(msg, console.log)

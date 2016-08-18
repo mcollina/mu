@@ -8,7 +8,7 @@ t.plan(4)
 function A () {
   const instance = mu()
 
-  instance.add({
+  instance.match({
     some: 'pattern'
   }, function (msg, cb) {
     cb(null, { who: 'A' })
@@ -20,7 +20,7 @@ function A () {
 function B () {
   const instance = mu()
 
-  instance.add({
+  instance.match({
     some: 'pattern'
   }, function (msg, cb) {
     cb(null, { who: 'B' })
@@ -40,7 +40,7 @@ main.route({
   to: 'A'
 }, A())
 
-main.act({
+main.send({
   some: 'pattern',
   to: 'A'
 }, (err, result) => {
@@ -48,7 +48,7 @@ main.act({
   t.deepEqual(result, { who: 'A' })
 })
 
-main.act({
+main.send({
   some: 'pattern'
 }, (err, result) => {
   t.error(err)

@@ -9,7 +9,7 @@ t.plan(4)
 function A () {
   const instance = mu()
 
-  instance.add({
+  instance.match({
     some: 'pattern'
   }, function (msg, cb) {
     t.deepEqual(msg, {
@@ -35,7 +35,7 @@ server.listen(function (err) {
 
   const client = http.client(server.address())
 
-  client.act({
+  client.send({
     some: 'pattern',
     from: 'http'
   }, (err, result) => {

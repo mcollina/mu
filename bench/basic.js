@@ -10,7 +10,7 @@ seneca.add({
 })
 
 const mu = require('..')()
-mu.add({
+mu.match({
   hello: 'world'
 }, function (ctx, msg, cb) {
   cb(null, { something: 'else' })
@@ -27,7 +27,7 @@ const run = fastbench([
     seneca.act({ hello: 'world' }, cb)
   },
   function actMu (cb) {
-    mu.act({ hello: 'world' }, cb)
+    mu.send({ hello: 'world' }, cb)
   }
 ], 10000)
 

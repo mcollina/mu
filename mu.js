@@ -14,7 +14,7 @@ function Mu () {
   this._registry = bloomrun({ indexing: 'depth' })
 }
 
-Mu.prototype.add = function (pattern, func) {
+Mu.prototype.match = function (pattern, func) {
   func = wrap(func)
 
   this._registry.add(tinysonic(pattern) || pattern, {
@@ -22,7 +22,7 @@ Mu.prototype.add = function (pattern, func) {
   })
 }
 
-Mu.prototype.act = function (message, done) {
+Mu.prototype.send = function (message, done) {
   message = tinysonic(message) || message
   const action = this._registry.lookup(message)
 
@@ -40,8 +40,8 @@ Mu.prototype.act = function (message, done) {
 }
 
 Mu.prototype.route = function (pattern, instance) {
-  this.add(pattern, function (ctx, msg, cb) {
-    instance.act(msg, cb)
+  this.match(pattern, function (ctx, msg, cb) {
+    instance.send(msg, cb)
   })
 }
 

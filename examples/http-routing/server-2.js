@@ -7,7 +7,7 @@ server.listen(process.env.PORT || 3002)
 
 function micro () {
   const i = mu()
-  i.add({
+  i.match({
     some: 'pattern'
   }, function (ctx, msg, cb) {
     const hello = msg.name || 'world'

@@ -25,7 +25,7 @@ function buildMu () {
   const micro = mu()
   const server = http.server(micro)
 
-  micro.add({
+  micro.match({
     hello: 'world'
   }, function (ctx, msg, cb) {
     cb(null, { something: 'else' })
@@ -42,7 +42,7 @@ const run = fastbench([
     senecaClient.act({ hello: 'world' }, cb)
   },
   function actMu (cb) {
-    muClient.act({ hello: 'world' }, cb)
+    muClient.send({ hello: 'world' }, cb)
   }
 ], 10000)
 

@@ -36,7 +36,7 @@ function server (mu) {
 
     const waiter = pool.get()
     waiter.res = res
-    mu.act(parse.value, waiter.func)
+    mu.send(parse.value, waiter.func)
   }
 
   function Waiter () {
@@ -70,16 +70,16 @@ function client (opts) {
   })
 
   return {
-    act,
+    send,
     close
   }
 
-  function act (msg, cb) {
+  function send (msg, cb) {
     const postData = JSON.stringify(msg)
     const options = {
       hostname: opts.hostname || opts.host,
       port: opts.port,
-      path: '/_act',
+      path: '/_send',
       method: 'POST',
       agent: agent,
       headers: {
