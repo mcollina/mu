@@ -35,9 +35,7 @@
   },
   "dependencies": {
     "bloomrun": "^2.1.1",
-    "body-parser": "^1.15.2",
-    "concat-stream": "^1.5.1",
     "fast-json-parse": "^1.0.2",
-    "pump": "^1.0.1"
+    "reusify": "^1.0.1"
   }
 }

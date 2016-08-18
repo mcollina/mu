@@ -1,10 +1,8 @@
 'use strict'
 
 const fastbench = require('fastbench')
-const seneca = require('seneca')
-const mu = require('..')
-const http = require('../http')
 
+const seneca = require('seneca')
 function buildSeneca () {
   const server = seneca()
 
@@ -18,6 +16,10 @@ function buildSeneca () {
 
   return seneca().client()
 }
+const senecaClient = buildSeneca()
+
+const mu = require('..')
+const http = require('../http')
 
 function buildMu () {
   const micro = mu()
@@ -25,7 +27,7 @@ function buildMu () {
 
   micro.add({
     hello: 'world'
-  }, function (msg, cb) {
+  }, function (ctx, msg, cb) {
     cb(null, { something: 'else' })
   })
 
@@ -33,9 +35,7 @@ function buildMu () {
 
   return http.client({ port: 3042 })
 }
-
-var senecaClient = buildSeneca()
-var muClient = buildMu()
+const muClient = buildMu()
 
 const run = fastbench([
   function actSeneca (cb) {
@@ -44,7 +44,7 @@ const run = fastbench([
   function actMu (cb) {
     muClient.act({ hello: 'world' }, cb)
   }
-], 1000)
+], 10000)
 
 setTimeout(function () {
   run(function () {

@@ -1,6 +1,7 @@
 'use strict'
 
 const bloomrun = require('bloomrun')
+const pool = require('reusify')(Desync)
 
 function Mu () {
   if (!(this instanceof Mu)) {
@@ -29,19 +30,11 @@ Mu.prototype.act = function (message, done) {
   }
 
   const func = action.func
-  // needed to dezalgo
-  var sync = true
 
-  // TODO avoid creating a closure
-  func(this, message, function (err, result) {
-    if (sync) {
-      process.nextTick(done, err, result)
-    } else {
-      done(err, result)
-    }
-  })
-
-  sync = false
+  const desync = pool.get()
+  desync.done = done
+  func(this, message, desync.func)
+  desync.sync = false
 }
 
 Mu.prototype.route = function (pattern, instance) {
@@ -57,6 +50,27 @@ function wrap (func) {
     }
   }
   return func
+}
+
+function Desync () {
+  var that = this
+
+  this.next = null
+  this.done = null
+  this.sync = true
+
+  this.func = function (err, result) {
+    var done = that.done
+    var sync = that.sync
+    that.done = null
+    that.sync = true
+    pool.release(that)
+    if (sync) {
+      process.nextTick(done, err, result)
+    } else {
+      done(err, result)
+    }
+  }
 }
 
 module.exports = Mu
