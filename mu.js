@@ -2,6 +2,7 @@
 
 const bloomrun = require('bloomrun')
 const pool = require('reusify')(Desync)
+const tinysonic = require('tinysonic')
 
 function Mu () {
   if (!(this instanceof Mu)) {
@@ -16,12 +17,13 @@ function Mu () {
 Mu.prototype.add = function (pattern, func) {
   func = wrap(func)
 
-  this._registry.add(pattern, {
+  this._registry.add(tinysonic(pattern) || pattern, {
     func
   })
 }
 
 Mu.prototype.act = function (message, done) {
+  message = tinysonic(message) || message
   const action = this._registry.lookup(message)
 
   if (!action) {
