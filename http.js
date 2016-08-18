@@ -45,15 +45,6 @@ function client (opts) {
     keepAlive: true
   })
 
-  // avoid to keep the client open
-  // if nothing is happening
-  // const old = agent.createConnection
-  // agent.createConnection = function (opts) {
-  //   const stream = old(opts)
-  //   stream.unref()
-  //   return stream
-  // }
-
   return {
     act,
     close
