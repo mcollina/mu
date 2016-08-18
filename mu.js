@@ -44,6 +44,12 @@ Mu.prototype.act = function (message, done) {
   sync = false
 }
 
+Mu.prototype.route = function (pattern, instance) {
+  this.add(pattern, function (ctx, msg, cb) {
+    instance.act(msg, cb)
+  })
+}
+
 function wrap (func) {
   if (func.length === 2) {
     return function (ctx, msg, cb) {
