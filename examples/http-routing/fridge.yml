@@ -1,0 +1,6 @@
+server:
+  type: node
+server-1:
+  type: node
+server-2:
+  type: node
