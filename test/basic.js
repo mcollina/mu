@@ -1,5 +1,6 @@
 'use strict'
 
+require('./setup')
 const t = require('tap')
 const mu = require('..')()
 
@@ -22,13 +23,13 @@ mu.match({
 mu.send({ hello: 'world' }, (err, result) => {
   t.error(err)
   t.ok(after, 'delayed execution')
-  t.deepEqual(result, { result: 42 }, 'result matches')
+  t.msgEqual(result, { result: 42 }, 'result matches')
 })
 
 mu.send('hello:matteo', (err, result) => {
   t.error(err)
   t.ok(after, 'delayed execution')
-  t.deepEqual(result, { result: 24 }, 'result matches')
+  t.msgEqual(result, { result: 24 }, 'result matches')
 })
 
 after = true

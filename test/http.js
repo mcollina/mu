@@ -1,5 +1,6 @@
 'use strict'
 
+require('./setup')
 const t = require('tap')
 const mu = require('..')
 const http = require('../http')
@@ -12,7 +13,7 @@ function A () {
   instance.match({
     some: 'pattern'
   }, function (msg, cb) {
-    t.deepEqual(msg, {
+    t.msgEqual(msg, {
       some: 'pattern',
       from: 'http'
     })
@@ -40,7 +41,7 @@ server.listen(function (err) {
     from: 'http'
   }, (err, result) => {
     t.error(err)
-    t.deepEqual(result, { who: 'A' })
+    t.msgEqual(result, { who: 'A' })
   })
 })
 

@@ -1,5 +1,6 @@
 'use strict'
 
+require('./setup')
 const t = require('tap')
 const mu = require('..')
 
@@ -45,12 +46,12 @@ main.send({
   to: 'A'
 }, (err, result) => {
   t.error(err)
-  t.deepEqual(result, { who: 'A' })
+  t.msgEqual(result, { who: 'A' })
 })
 
 main.send({
   some: 'pattern'
 }, (err, result) => {
   t.error(err)
-  t.deepEqual(result, { who: 'B' })
+  t.msgEqual(result, { who: 'B' })
 })

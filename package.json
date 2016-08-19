@@ -36,7 +36,9 @@
   "dependencies": {
     "bloomrun": "^2.1.1",
     "fast-json-parse": "^1.0.2",
+    "nid": "^0.3.2",
     "reusify": "^1.0.1",
-    "tinysonic": "^1.0.1"
+    "tinysonic": "^1.0.1",
+    "uuid": "^2.0.2"
   }
 }

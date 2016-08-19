@@ -3,11 +3,15 @@
 const bloomrun = require('bloomrun')
 const pool = require('reusify')(Desync)
 const tinysonic = require('tinysonic')
+const uuid = require('uuid')
 
 function Mu () {
   if (!(this instanceof Mu)) {
     return new Mu()
   }
+
+  this.id = baseId()
+  this._count = 0
 
   // maybe indexing might be configurable
   // set to depth for compatibility with Seneca
@@ -31,10 +35,18 @@ Mu.prototype.send = function (message, done) {
     return
   }
 
+  addMeta(message, null, this)
+
+  if (this._count === 2147483647) {
+    this.id = baseId() // rebase
+    this._count = 0
+  }
+
   const func = action.func
 
   const desync = pool.get()
   desync.done = done
+  desync.msg = message
   func(this, message, desync.func)
   desync.sync = false
 }
@@ -54,18 +66,27 @@ function wrap (func) {
   return func
 }
 
+function addMeta (msg, prev, that) {
+  msg.meta$ = {
+    id: prev && prev.meta$.id || that.id + '/' + (that._count++)
+  }
+}
+
 function Desync () {
   var that = this
 
   this.next = null
   this.done = null
   this.sync = true
+  this.msg = null
 
   this.func = function (err, result) {
     var done = that.done
     var sync = that.sync
+    addMeta(result, that.msg)
     that.done = null
     that.sync = true
+    that.msg = null
     pool.release(that)
     if (sync) {
       process.nextTick(done, err, result)
@@ -73,6 +94,10 @@ function Desync () {
       done(err, result)
     }
   }
+}
+
+function baseId () {
+  return new Buffer(uuid.parse(uuid.v4())).toString('base64')
 }
 
 module.exports = Mu
